@@ -13,13 +13,13 @@ angular2+ 다음지도 컴포넌트 입니다.
 [Ngx-Daum-Map on GitHub](https://github.com/stone-i/NgxDaumMap)
 
 
-#Install :
+# Install :
 ```
 npm install ngx-daum-map
 ```
 
 
-#Example
+# Example
 
 ### MainModule :
 ```

@@ -1,6 +1,6 @@
 {
   "name": "ngx-daum-map",
-  "version": "0.3.3",
+  "version": "0.3.31",
   "description": "DaumMap components for Angular2 or Higher",
   "license": "MIT",
   "keywords": [
@@ -15,10 +15,11 @@
   "scripts": {
     "clean": "rimraf dist && rimraf .tmp && mkdir dist && mkdir .tmp && rimraf 'src/**/*.ngfactory.ts'",
     "prebuild": "npm run clean",
-    "build": "npm run scripts && npm run packagejson",
+    "build": "npm run scripts && npm run packagejson && npm run copyinfo",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "packagejson": "node ./scripts/create-package-json.js",
     "scripts": "npm run ngc:esm && npm run bundle:umd",
+    "copyinfo": "cp ./README.md ./dist/README.md",
     "bundle:umd": "rollup -c rollup.config.js",
     "ngc:esm": "ngc -p tsconfig.json",
     "clang:format": "clang-format --glob=src/**/*.ts -i",
