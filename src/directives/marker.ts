@@ -7,6 +7,7 @@ import * as mapTypes from '../services/daum-maps-types';
 import {MarkerManager} from '../services/managers/marker-manager';
 
 import {AdmInfoWindow} from './info-window';
+import {MarkerImage} from '../services/daum-maps-types';
 
 let markerId = 0;
 
@@ -36,7 +37,7 @@ let markerId = 0;
 @Directive({
   selector: 'adm-marker',
   inputs: [
-    'latitude', 'longitude', 'title', 'label', 'draggable: markerDraggable', 'iconUrl',
+    'latitude', 'longitude', 'title', 'label', 'draggable: markerDraggable', 'image',
     'openInfoWindow', 'opacity', 'visible', 'zIndex'
   ],
   outputs: ['markerClick', 'dragEnd', 'mouseOver', 'mouseOut']
@@ -70,7 +71,7 @@ export class AdmMarker implements OnDestroy, OnChanges, AfterContentInit {
   /**
    * Icon (the URL of the image) for the foreground.
    */
-  iconUrl: string;
+  image: MarkerImage;
 
   /**
    * If true, the marker is visible
@@ -164,7 +165,7 @@ export class AdmMarker implements OnDestroy, OnChanges, AfterContentInit {
     if (changes['draggable']) {
       this._markerManager.updateDraggable(this);
     }
-    if (changes['iconUrl']) {
+    if (changes['image']) {
       this._markerManager.updateIcon(this);
     }
     if (changes['opacity']) {

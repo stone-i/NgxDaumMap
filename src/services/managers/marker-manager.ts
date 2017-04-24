@@ -49,7 +49,11 @@ export class MarkerManager {
   }
 
   updateIcon(marker: AdmMarker): Promise<void> {
-    return this._markers.get(marker).then((m: Marker) => {});//m.setImage(marker.iconUrl));
+    return this._markers.get(marker).then((m: Marker) => {
+      m.setImage( new daum.maps.MarkerImage(
+        marker.image
+      ));
+    });
   }
 
   updateOpacity(marker: AdmMarker): Promise<void> {
