@@ -1,6 +1,6 @@
-{
+1{
   "name": "ngx-daum-map",
-  "version": "0.3.31",
+  "version": "0.3.377",
   "description": "DaumMap components for Angular2 or Higher",
   "license": "MIT",
   "keywords": [
@@ -26,7 +26,8 @@
     "postngc:esm": "mkdir -p dist/ && cp -R .tmp/esm/src/* dist/ && rimraf src/**/*.ngfactory.ts",
     "test": "karma start",
     "test:watch": "karma start --no-single-run --auto-watch",
-    "ci": "npm run build && npm run test"
+    "ci": "npm run build && npm run test",
+    "auto-pub": "npm run build && npm publish dist"
   },
   "peerDependencies": {
     "@angular/common": "^4.0.0 || ^2.0.0",

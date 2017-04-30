@@ -6,6 +6,7 @@ import { LazyMapsAPILoader } from './services/maps-api-loader/lazy-maps-api-load
 import {LAZY_MAPS_API_CONFIG, LazyMapsAPILoaderConfigLiteral} from './services/maps-api-loader/lazy-maps-api-loader';
 import {MapsAPILoader} from './services/maps-api-loader/maps-api-loader';
 import {BROWSER_GLOBALS_PROVIDERS} from './utils/browser-globals';
+import {DaumMapsAPIWrapper} from "./services/daum-maps-api-wrapper";
 
 /**
  * @internal
@@ -29,9 +30,9 @@ export class AdmCoreModule {
     return {
       ngModule: AdmCoreModule,
       providers: [
-        ...BROWSER_GLOBALS_PROVIDERS, 
-        {provide: MapsAPILoader, useClass: LazyMapsAPILoader},
-        {provide: LAZY_MAPS_API_CONFIG, useValue: lazyMapsAPILoaderConfig}
+        ...BROWSER_GLOBALS_PROVIDERS, {provide: MapsAPILoader, useClass: LazyMapsAPILoader},
+        {provide: LAZY_MAPS_API_CONFIG, useValue: lazyMapsAPILoaderConfig},
+        DaumMapsAPIWrapper
       ],
     };
   }

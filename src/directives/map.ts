@@ -11,6 +11,7 @@ import {
 import {LatLngBounds, LatLngBoundsLiteral, MapTypeStyle} from '../services/daum-maps-types';
 import {InfoWindowManager} from '../services/managers/info-window-manager';
 import {MarkerManager} from '../services/managers/marker-manager';
+import {WindowRef} from "../utils/browser-globals";
 
 /**
  * admMap renders a Daum Map.
@@ -46,9 +47,9 @@ import {MarkerManager} from '../services/managers/marker-manager';
     'keyboardShortcuts', 'projectionId', 'tileAnimation'
   ],
   outputs: [
-    'center_change', 'zoom_start', 'zoom_changed', 'bounds_changed',
+    'center_changed', 'zoom_start', 'zoom_changed', 'bounds_changed',
     'click', 'dblclick', 'rightclick', 'mousemove', 'dragstart', 'dragend',
-    'idle', 'tilesloaded', 'maptypeid_changed'
+    'idle', 'tilesloaded', 'maptypeid_changed', 'mapReady'
   ],
   host: {
     // todo: deprecated - we will remove it with the next version
@@ -105,7 +106,7 @@ export class AdmMap implements OnChanges, OnInit, OnDestroy {
 
 /**
  * Events
- *     'center_change', 'zoom_start', 'zoom_changed', 'bounds_changed',
+ *     'center_changed', 'zoom_start', 'zoom_changed', 'bounds_changed',
  *     'click', 'dblclick', 'rightclick', 'mousemove', 'dragstart', 'dragend',
  *     'idle', 'tilesloaded', 'maptypeid_changed'
  */
@@ -113,13 +114,14 @@ export class AdmMap implements OnChanges, OnInit, OnDestroy {
   rightclick: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
   dblclick: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
   mousemove: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
-  center_change: EventEmitter<LatLngLiteral> = new EventEmitter<LatLngLiteral>();
+  center_changed: EventEmitter<LatLngLiteral> = new EventEmitter<LatLngLiteral>();
   bounds_changed: EventEmitter<LatLngBounds> = new EventEmitter<LatLngBounds>();
   idle: EventEmitter<void> = new EventEmitter<void>();
   zoom_change: EventEmitter<number> = new EventEmitter<number>();
   mapReady: EventEmitter<DaumMap> = new EventEmitter<DaumMap>();
+  dragend: EventEmitter<LatLngLiteral> = new EventEmitter<LatLngLiteral>();
 
-  constructor(private _elem: ElementRef, private _mapsWrapper: DaumMapsAPIWrapper) {}
+  constructor(private _elem: ElementRef, private w: WindowRef, private _mapsWrapper: DaumMapsAPIWrapper) {}
 
   /** @internal */
   ngOnInit() {
@@ -147,7 +149,12 @@ export class AdmMap implements OnChanges, OnInit, OnDestroy {
        */
     })
       .then(() => this._mapsWrapper.getNativeMap())
-      .then(map => this.mapReady.emit(map));
+      .then(map => {
+        this.w.getNativeWindow().onresize = (event: any) => {
+          this.relayout();
+        };
+        return this.mapReady.emit(map);
+      });
 
     // register event listeners
     this._handleMapCenterChange();
@@ -214,6 +221,7 @@ export class AdmMap implements OnChanges, OnInit, OnDestroy {
     if (typeof this.latitude !== 'number' || typeof this.longitude !== 'number') {
       return;
     }
+
     this._setCenter();
   }
 
@@ -223,7 +231,19 @@ export class AdmMap implements OnChanges, OnInit, OnDestroy {
       lng: this.longitude,
     };
     this._mapsWrapper.setCenter(newCenter);
+    // this._mapsWrapper.panTo(newCenter);
+  }
 
+  _panTo(lat?: number, lng?: number){
+    if (lat && lng) {
+      this.latitude = lat;
+      this.longitude = lng;
+    }
+    let newCenter: LatLngLiteral = {
+        lat: this.latitude,
+        lng: this.longitude,
+      };
+    this._mapsWrapper.panTo(newCenter);
   }
 
   private relayout() {
@@ -235,7 +255,7 @@ export class AdmMap implements OnChanges, OnInit, OnDestroy {
       this._mapsWrapper.getCenter().then((center: LatLng) => {
         this.latitude = center.getLat();
         this.longitude = center.getLng();
-        this.center_change.emit(<LatLngLiteral>{lat: this.latitude, lng: this.longitude});
+        this.center_changed.emit(<LatLngLiteral>{lat: this.latitude, lng: this.longitude});
       });
     });
     this._observableSubscriptions.push(s);
@@ -259,9 +279,23 @@ export class AdmMap implements OnChanges, OnInit, OnDestroy {
     this._observableSubscriptions.push(s);
   }
 
+  private _handleDragEnd() {
+    const s = this._mapsWrapper.subscribeToMapEvent<void>('dragend').subscribe(() => {
+      this._mapsWrapper.getCenter().then((center: LatLng) => {
+        this.latitude = center.getLat();
+        this.longitude = center.getLng();
+        this.dragend.emit(<LatLngLiteral>{lat: this.latitude, lng: this.longitude});
+      });
+    });
+    this._observableSubscriptions.push(s);
+  }
+
   private _handleIdleEvent() {
     const s = this._mapsWrapper.subscribeToMapEvent<void>('idle').subscribe(
-        () => { this.idle.emit(void 0); });
+        () => {
+          this._setCenter();
+          return this.idle.emit(void 0);
+        });
     this._observableSubscriptions.push(s);
   }
 

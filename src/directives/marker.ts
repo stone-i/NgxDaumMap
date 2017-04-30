@@ -7,7 +7,7 @@ import * as mapTypes from '../services/daum-maps-types';
 import {MarkerManager} from '../services/managers/marker-manager';
 
 import {AdmInfoWindow} from './info-window';
-import {MarkerImage} from '../services/daum-maps-types';
+import {MarkerImage, MarkerImageLiteral} from '../services/daum-maps-types';
 
 let markerId = 0;
 
@@ -71,7 +71,7 @@ export class AdmMarker implements OnDestroy, OnChanges, AfterContentInit {
   /**
    * Icon (the URL of the image) for the foreground.
    */
-  image: MarkerImage;
+  image: MarkerImageLiteral;
 
   /**
    * If true, the marker is visible

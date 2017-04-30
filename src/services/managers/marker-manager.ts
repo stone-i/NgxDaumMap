@@ -50,8 +50,9 @@ export class MarkerManager {
 
   updateIcon(marker: AdmMarker): Promise<void> {
     return this._markers.get(marker).then((m: Marker) => {
+      console.log('image : ');
       m.setImage( new daum.maps.MarkerImage(
-        marker.image
+        marker.image.src, new daum.maps.Point(marker.image.size.width, marker.image.size.height)
       ));
     });
   }
@@ -71,7 +72,7 @@ export class MarkerManager {
   addMarker(marker: AdmMarker) {
     const markerPromise = this._mapsWrapper.createMarker({
       position: {lat: marker.latitude, lng: marker.longitude},
-      // image: marker.iconUrl,
+      image: marker.image,
       title: marker.label,
       draggable: marker.draggable,
       clickable: true,

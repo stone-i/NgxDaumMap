@@ -3,7 +3,7 @@ import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
 
 import * as mapTypes from './daum-maps-types';
-import { Polyline, LatLngLiteral } from './daum-maps-types';
+import {Polyline, LatLngLiteral, MarkerImage, MarkerImageLiteral} from './daum-maps-types';
 import {PolylineOptions} from './daum-maps-types';
 import {MapsAPILoader} from './maps-api-loader/maps-api-loader';
 
@@ -36,10 +36,8 @@ export class DaumMapsAPIWrapper {
 
   setMapOptions(options: mapTypes.MapOptions) {
     this._map.then((m: mapTypes.DaumMap) => {
-
       // m.setOptions(options);
-
-  });
+    });
   }
 
   /**
@@ -49,8 +47,17 @@ export class DaumMapsAPIWrapper {
       Promise<mapTypes.Marker> {
     return this._map.then((map: mapTypes.DaumMap) => {
       options.map = map;
+
       let li: LatLngLiteral = options.position as LatLngLiteral;
+
+      if (options.image != null){
+        let mImg: MarkerImageLiteral = options.image as MarkerImageLiteral;
+        let image: MarkerImage = new daum.maps.MarkerImage(mImg.src, new daum.maps.Size(mImg.size.width, mImg.size.height));
+        options.image = image;
+      }
+
       options.position = new daum.maps.LatLng(li.lat, li.lng);
+
       return new daum.maps.Marker(options);
     });
   }
@@ -106,7 +113,7 @@ export class DaumMapsAPIWrapper {
   }
 
   setCenter(latLng: mapTypes.LatLngLiteral): Promise<void> {
-    return this._map.then((map: mapTypes.DaumMap) => map.setCenter(new daum.maps.LatLng(latLng.lat,latLng.lng)));
+    return this._map.then((map: mapTypes.DaumMap) => map.setCenter(new daum.maps.LatLng(latLng.lat, latLng.lng)));
   }
 
   getZoom(): Promise<number> { return this._map.then((map: mapTypes.DaumMap) => map.getLevel()); }
@@ -123,8 +130,8 @@ export class DaumMapsAPIWrapper {
     return this._map.then((map: mapTypes.DaumMap) => map.getCenter());
   }
 
-  panTo(latLng: mapTypes.LatLng|mapTypes.LatLngLiteral): Promise<void> {
-    return this._map.then((map) => map.panTo(latLng));
+  panTo(latLng: mapTypes.LatLngLiteral): Promise<void> {
+    return this._map.then((map) => map.panTo(new daum.maps.LatLng(latLng.lat, latLng.lng)));
   }
 
   relayout(): void{

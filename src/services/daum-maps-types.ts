@@ -7,20 +7,20 @@ export interface DaumMap extends MVCObject {
   setCenter(latLng: LatLng|LatLngLiteral): void;
   getCenter(): LatLng;
 
-  setLevel(level: number,options?:Object): void;
+  setLevel(level: number, options?: Object): void;
   getLevel(): number;
 
   setMapTypeId(mapTypeId: MapTypeId): void;
   getMapTypeId(): MapTypeId;
 
-  setBounds(bounds: LatLngBounds, paddingTop?: number, paddingRight?: number,paddingBottom?: number,paddingLeft?: number): void;
+  setBounds(bounds: LatLngBounds, paddingTop?: number, paddingRight?: number, paddingBottom?: number, paddingLeft?: number): void;
   getBounds(): LatLngBounds;
 
   PanBy(dx: number, dy: number): void;
-  panTo(latLng: LatLng|LatLngLiteral, padding?: number): void;
+  panTo(latLng: LatLng, padding?: number): void;
 
-  addControl(control: MapTypeControl|ZoomControl,position: number): void;
-  removeControl(control: MapTypeControl|ZoomControl) :void;
+  addControl(control: MapTypeControl|ZoomControl, position: number): void;
+  removeControl(control: MapTypeControl|ZoomControl): void;
 
   setDraggable(draggable: boolean): void;
   getDraggable(): boolean;
@@ -39,14 +39,12 @@ export interface DaumMap extends MVCObject {
   setKeyboardShortcuts(active: boolean): void;
   getKeyboardShortcuts(): boolean;
 
-  setCopyrightPosition(copyrightPosition: CopyrightPosition,reversed?: boolean): void;
+  setCopyrightPosition(copyrightPosition: CopyrightPosition, reversed?: boolean): void;
 
   getProjection(): MapProjection;
 
   setCursor(style: string): void;
 }
-
-
 
 export interface Marker extends MVCObject {
   constructor(options?: MarkerOptions): void;
@@ -77,7 +75,7 @@ export interface Marker extends MVCObject {
 export interface MarkerOptions {
   map?: DaumMap;
   position?: LatLng|LatLngLiteral|Viewpoint;
-  image?: MarkerImage;
+  image?: MarkerImage|MarkerImageLiteral;
   title?: string;
   draggable?: boolean;
   clickable?: boolean;
@@ -88,7 +86,13 @@ export interface MarkerOptions {
 }
 
 export interface MarkerImage {
-  constructor(src: string,size: Size, options?:MarkerImageOptions): void;
+  constructor(src: string, size: Size, options?: MarkerImageOptions): void;
+}
+
+export interface MarkerImageLiteral {
+  src: string;
+  size: {width: number, height: number};
+  options?: MarkerImageOptions;
 }
 
 export interface MarkerImageOptions{
@@ -138,7 +142,7 @@ export interface CircleOptions {
 }
 
 export interface LatLngBounds {
-  constructor(sw:LatLng, ne:LatLng): void;
+  constructor(sw: LatLng, ne: LatLng): void;
   equals(other: LatLngBounds|LatLngBoundsLiteral): boolean;
   toString(): string;
   getNorthEast(): LatLng;
@@ -154,8 +158,6 @@ export interface LatLngBoundsLiteral {
   south: number;
   west: number;
 }
-
-
 
 export interface MouseEvent { latLng: LatLng; }
 
@@ -232,19 +234,19 @@ export interface Size {
 }
 
 export interface Event{
-    addListener(target:EventTarget,type:string,handler:Function): void
-    removeListener(target:EventTarget,type:string,handler:Function): void;
+    addListener(target: EventTarget, type: string, handler: Function): void;
+    removeListener(target: EventTarget, type: string, handler: Function): void;
 }
 
 export interface InfoWindowOptions {
   content?: string|Node;
   disableAutoPan?: boolean;
-  map?: DaumMap,
-  position?: LatLngLiteral|LatLng,
-  removable?:boolean,
-  zIndex?: number,
-  altitude?: number,
-  range?: number
+  map?: DaumMap;
+  position?: LatLngLiteral|LatLng;
+  removable?: boolean;
+  zIndex?: number;
+  altitude?: number;
+  range?: number;
 }
 
 export interface Point {
@@ -477,12 +479,11 @@ export interface Tileset{
     minZoom: number,
     maxZoom: number
   ): void;
-  add(id: string, tileset:Tileset): void;
+  add(id: string, tileset: Tileset): void;
 }
 export interface TilesetCopyright{
   constructor(msg: string, shortMsg: string, minZoom: number): void;
 }
-
 
 /***** Controls *****/
 /** Options for the rendering of the map type control. */
