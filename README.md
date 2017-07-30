@@ -73,7 +73,7 @@ import {Component, OnInit} from "@angular/core";
 })
 export class DetailInfoComponent {
 
-  bounds_changed(event) {
+  onBoundsChanged(event) {
   
     console.log(event);
     
