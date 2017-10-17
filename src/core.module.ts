@@ -7,13 +7,14 @@ import {LAZY_MAPS_API_CONFIG, LazyMapsAPILoaderConfigLiteral} from './services/m
 import {MapsAPILoader} from './services/maps-api-loader/maps-api-loader';
 import {BROWSER_GLOBALS_PROVIDERS} from './utils/browser-globals';
 import {DaumMapsAPIWrapper} from "./services/daum-maps-api-wrapper";
+import {AdmZoomControl} from "./directives/zoomControl";
 
 /**
  * @internal
  */
 export function coreDirectives() {
   return [
-    AdmMap, AdmMarker, AdmInfoWindow
+    AdmMap, AdmMarker, AdmInfoWindow, AdmZoomControl
   ];
 };
 

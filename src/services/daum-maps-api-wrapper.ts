@@ -127,8 +127,6 @@ export class DaumMapsAPIWrapper {
     return new daum.maps.LatLng(lat, lng);
   }
 
-  create
-
   addControl(control: any, position: any): Promise<void> {
     return this._map.then((map: mapTypes.DaumMap) => map.addControl(control, position));
   }
