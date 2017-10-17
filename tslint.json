@@ -37,8 +37,7 @@
       "check-else"
     ],
     "quotemark": [
-      true,
-      "single"
+      true
     ],
     "radix": true,
     "semicolon": true,

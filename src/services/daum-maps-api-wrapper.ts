@@ -3,7 +3,10 @@ import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
 
 import * as mapTypes from './daum-maps-types';
-import {Polyline, LatLngLiteral, MarkerImage, MarkerImageLiteral} from './daum-maps-types';
+import {
+  Polyline, LatLngLiteral, MarkerImage, MarkerImageLiteral, ControlPosition,
+  ZoomControl
+} from './daum-maps-types';
 import {PolylineOptions} from './daum-maps-types';
 import {MapsAPILoader} from './maps-api-loader/maps-api-loader';
 
@@ -62,6 +65,18 @@ export class DaumMapsAPIWrapper {
     });
   }
 
+  createZoomControl(): Promise<mapTypes.ZoomControl> {
+    return this._map.then((map: mapTypes.DaumMap) => {
+      return new daum.maps.ZoomControl();
+    });
+  }
+
+  addZommControl(zoomControl: ZoomControl, position: ControlPosition): Promise<void> {
+    return this._map.then((map: mapTypes.DaumMap) => {
+      map.addControl(zoomControl, position);
+    });
+  }
+
   createInfoWindow(options?: mapTypes.InfoWindowOptions): Promise<mapTypes.InfoWindow> {
     return this._map.then(() => { return new daum.maps.InfoWindow(options); });
   }
@@ -110,6 +125,16 @@ export class DaumMapsAPIWrapper {
   }
   createLatLng(lat: number|(() => number), lng: number|(() => number)): any{
     return new daum.maps.LatLng(lat, lng);
+  }
+
+  create
+
+  addControl(control: any, position: any): Promise<void> {
+    return this._map.then((map: mapTypes.DaumMap) => map.addControl(control, position));
+  }
+
+  removeControl(control: any): Promise<void> {
+    return this._map.then((map: mapTypes.DaumMap) => map.removeControl(control));
   }
 
   setCenter(latLng: mapTypes.LatLngLiteral): Promise<void> {

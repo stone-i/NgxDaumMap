@@ -11,7 +11,7 @@ export enum DaumMapsScriptProtocol {
 }
 
 /**
- * Token for the config of the LazyMapsAPILoader. Please provide an object of type 
+ * Token for the config of the LazyMapsAPILoader. Please provide an object of type
  * {@link LazyMapsAPILoaderConfig}.
  */
 export const LAZY_MAPS_API_CONFIG = new OpaqueToken('LazyMapsApiConfig');
@@ -143,6 +143,7 @@ export class LazyMapsAPILoader extends MapsAPILoader {
     const hostAndPath: string = this._config.hostAndPath || 'apis.daum.net/maps/maps3.js';
     const queryParams: {[key: string]: string | Array<string>} = {
       apikey: this._config.apiKey,
+      appkey: this._config.apiKey,
       autoload: this._config.autoload ? 'true' : 'false'
     };
     const params: string =
